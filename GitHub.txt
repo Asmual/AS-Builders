@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat: implement Hero and Footer UI"
+git commit -m "feat: add About, Services, Projects and Blog pages"
 git push
