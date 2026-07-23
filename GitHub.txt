@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat: add responsive navbar component"
+git commit -m "feat(auth): add login and registration pages with better-auth integration"
 git push
