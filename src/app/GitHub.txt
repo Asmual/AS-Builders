@@ -1,7 +1,12 @@
 echo "# AS-Builders" >> README.md
 git init
 git add .
-git commit -m "first commit"
+git commit -m "Initial project setup"
 git branch -M main
 git remote add origin https://github.com/Asmual/AS-Builders.git
 git push -u origin main
+
+
+git add .
+git commit -m "feat: add responsive navbar component"
+git push
