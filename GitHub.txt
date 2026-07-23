@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat(auth): add login and registration pages with better-auth integration"
+git commit -m "feat: implement Hero and Footer UI"
 git push

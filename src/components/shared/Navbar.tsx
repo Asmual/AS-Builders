@@ -30,18 +30,19 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="absolute top-0 left-0 w-full z-50 bg-black/30 backdrop-blur-md border-b border-white/10">
+    // Changed 'absolute' to 'fixed' to keep navbar sticky on top during scroll
+    <header className="fixed top-0 left-0 w-full z-50 bg-slate-950/40 backdrop-blur-md border-b border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           
           {/* Logo & Brand Section */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center space-x-3">
               <Image
-                src="/images/AS-Builders-Logo.png"
+                src="/images/AS-Biulders-logo.png"
                 alt="AS Builders Logo"
-                width={45}
-                height={45}
+                width={35}
+                height={35}
                 className="object-contain"
                 priority
               />
@@ -120,7 +121,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/login"
-                  className="text-gray-200 hover:text-white px-4 py-2 text-sm font-medium transition-colors"
+                  className="text-gray-200 hover:text-yellow-400 px-4 py-2 text-sm font-medium transition-colors"
                 >
                   Login
                 </Link>
