@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat(home): add FeaturedProjects, Testimonials, Services, and Footer components"
+git commit -m "feat(auth): integrate Google OAuth with Better-Auth for production"
 git push
