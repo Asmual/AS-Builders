@@ -73,7 +73,7 @@ export default function AboutPage() {
           </div>
 
           {/* CTA Banner */}
-          <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl p-6 sm:p-8 text-slate-950 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-linear-to-r from-yellow-500 to-amber-600 rounded-xl p-6 sm:p-8 text-slate-950 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-xl sm:text-2xl font-bold">Ready to start your next project?</h3>
               <p className="text-xs sm:text-sm font-medium opacity-90 mt-0.5">Get in touch with our expert structural engineers today.</p>

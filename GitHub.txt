@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat: add About, Services, Projects and Blog pages"
+git commit -m "feat(home): add FeaturedProjects, Testimonials, Services, and Footer components"
 git push
