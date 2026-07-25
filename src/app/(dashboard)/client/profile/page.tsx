@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   User,
@@ -16,9 +16,12 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useSession } from "@/lib/auth-client";
 
 export default function ProfilePage() {
+  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  
   const [formData, setFormData] = useState({
     fullName: "Asmual Obaidul Hoque",
     email: "asmual@asbuilders.com",
@@ -29,7 +32,21 @@ export default function ProfilePage() {
     bio: "Civil engineering project manager and full-stack developer passionate about building robust digital and physical infrastructures.",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Hydrate initial user details dynamically if available from session
+  useEffect(() => {
+    if (session?.user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData((prev) => ({
+        ...prev,
+        fullName: session.user.name || prev.fullName,
+        email: session.user.email || prev.email,
+      }));
+    }
+  }, [session]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -216,7 +233,7 @@ export default function ProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-6 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-6 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50 cursor-pointer"
               >
                 <Save className="h-4 w-4" />
                 {loading ? "Saving Changes..." : "Save Changes"}
@@ -271,7 +288,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => toast.success("Password updated successfully!")}
-                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 rounded-xl text-sm transition-colors border border-slate-700"
+                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 rounded-xl text-sm transition-colors border border-slate-700 cursor-pointer"
               >
                 Update Password
               </button>

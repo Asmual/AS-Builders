@@ -12,7 +12,7 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Dropdown ref for click outside detection
+  // Dropdown ref for detecting clicks outside
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -41,10 +41,10 @@ export default function Navbar() {
     return session.user.email?.split("@")[0] || "User";
   };
 
-  // Check user role dynamically (Default to 'client' if not defined)
+  // Check user role dynamically (Defaults to 'client' if not defined)
   const userRole = (session?.user as { role?: string })?.role || "client";
   const isAdmin = userRole.toLowerCase() === "admin";
-  
+
   // Dynamic Profile Page Routing
   const profileLink = isAdmin ? "/admin/profile" : "/client/profile";
 
@@ -97,7 +97,7 @@ export default function Navbar() {
               <div className="h-9 w-24 bg-white/10 animate-pulse rounded-md" />
             ) : session?.user ? (
               <div className="relative flex items-center space-x-3" ref={dropdownRef}>
-                {/* User First Name Greeting */}
+                {/* User Greeting */}
                 <span className="text-sm font-medium text-gray-200">
                   Hi, <span className="text-yellow-500">{getUserFirstName()}</span>
                 </span>
@@ -105,7 +105,7 @@ export default function Navbar() {
                 {/* Profile Avatar Button */}
                 <button
                   onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  className="relative flex items-center justify-center w-9 h-9 rounded-full ring-2 ring-yellow-500/50 hover:ring-yellow-500 focus:outline-none transition-all shrink-0"
+                  className="relative flex items-center justify-center w-9 h-9 rounded-full ring-2 ring-yellow-500/50 hover:ring-yellow-500 focus:outline-none transition-all shrink-0 cursor-pointer"
                   aria-label="User menu"
                 >
                   {session.user.image ? (
@@ -157,7 +157,7 @@ export default function Navbar() {
                         setIsDropdownOpen(false);
                         signOut();
                       }}
-                      className="w-full flex items-center px-4 py-2.5 text-sm text-red-400 hover:bg-slate-800/70 transition-colors border-t border-slate-800/50"
+                      className="w-full flex items-center px-4 py-2.5 text-sm text-red-400 hover:bg-slate-800/70 transition-colors border-t border-slate-800/50 cursor-pointer"
                     >
                       <FaSignOutAlt className="mr-3" /> Logout
                     </button>
@@ -242,7 +242,7 @@ export default function Navbar() {
                     setIsMobileMenuOpen(false);
                     signOut();
                   }}
-                  className="block text-sm text-red-400 font-medium"
+                  className="block text-sm text-red-400 font-medium cursor-pointer"
                 >
                   Logout
                 </button>

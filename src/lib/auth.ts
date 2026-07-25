@@ -22,6 +22,16 @@ export const auth = betterAuth({
 
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 
+// Session & Cookie Expiry Setup 
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24 * 1,
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 60 * 24 * 7,
+    },
+  },
+
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

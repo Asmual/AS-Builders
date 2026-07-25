@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "fix: resolve mongodb connection and deployment issues"
+git commit -m "feat: dark theme dashboard, custom 404 page, and auth redirect fixes"
 git push
