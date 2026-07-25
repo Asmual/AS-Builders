@@ -1,16 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
-import { FaUserCircle, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaUserCircle, FaSignOutAlt, FaUser, FaUserShield } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 
 export default function Navbar() {
   const { data: session, isPending } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Dropdown ref for click outside detection
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Extract first name safely from session user name or email
   const getUserFirstName = () => {
@@ -21,6 +41,13 @@ export default function Navbar() {
     return session.user.email?.split("@")[0] || "User";
   };
 
+  // Check user role dynamically (Default to 'client' if not defined)
+  const userRole = (session?.user as { role?: string })?.role || "client";
+  const isAdmin = userRole.toLowerCase() === "admin";
+  
+  // Dynamic Profile Page Routing
+  const profileLink = isAdmin ? "/admin/profile" : "/client/profile";
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
@@ -30,7 +57,6 @@ export default function Navbar() {
   ];
 
   return (
-    // Changed 'absolute' to 'fixed' to keep navbar sticky on top during scroll
     <header className="fixed top-0 left-0 w-full z-50 bg-slate-950/40 backdrop-blur-md border-b border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -70,7 +96,7 @@ export default function Navbar() {
             {isPending ? (
               <div className="h-9 w-24 bg-white/10 animate-pulse rounded-md" />
             ) : session?.user ? (
-              <div className="relative flex items-center space-x-3">
+              <div className="relative flex items-center space-x-3" ref={dropdownRef}>
                 {/* User First Name Greeting */}
                 <span className="text-sm font-medium text-gray-200">
                   Hi, <span className="text-yellow-500">{getUserFirstName()}</span>
@@ -78,39 +104,60 @@ export default function Navbar() {
 
                 {/* Profile Avatar Button */}
                 <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="relative flex items-center focus:outline-none rounded-full ring-2 ring-yellow-500/50 hover:ring-yellow-500 transition-all"
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  className="relative flex items-center justify-center w-9 h-9 rounded-full ring-2 ring-yellow-500/50 hover:ring-yellow-500 focus:outline-none transition-all shrink-0"
                   aria-label="User menu"
                 >
                   {session.user.image ? (
                     <Image
                       src={session.user.image}
                       alt={session.user.name || "User Avatar"}
-                      width={38}
-                      height={38}
-                      className="rounded-full object-cover"
+                      width={36}
+                      height={36}
+                      className="rounded-full object-cover w-full h-full"
                     />
                   ) : (
-                    <FaUserCircle className="w-9 h-9 text-gray-300" />
+                    <FaUserCircle className="w-full h-full text-gray-300" />
                   )}
                 </button>
 
                 {/* Dropdown Menu */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 top-12 w-48 bg-slate-900 border border-slate-800 rounded-lg shadow-xl py-2 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-2 z-50 overflow-hidden transition-all duration-200">
+                    
+                    {/* Role Header Indicator */}
+                    <div className="px-4 py-2 border-b border-slate-800/80 bg-slate-950/50 flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                        Role
+                      </span>
+                      <span
+                        className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md ${
+                          isAdmin
+                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                            : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                        }`}
+                      >
+                        <FaUserShield className="text-[10px]" />
+                        {isAdmin ? "Admin" : "Client"}
+                      </span>
+                    </div>
+
+                    {/* Dynamic Profile Link */}
                     <Link
-                      href="/profile"
+                      href={profileLink}
                       onClick={() => setIsDropdownOpen(false)}
-                      className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-slate-800 hover:text-yellow-500 transition-colors"
+                      className="flex items-center px-4 py-2.5 text-sm text-gray-300 hover:bg-slate-800/70 hover:text-yellow-500 transition-colors"
                     >
                       <FaUser className="mr-3 text-gray-400" /> View Profile
                     </Link>
+
+                    {/* Logout Button */}
                     <button
                       onClick={() => {
                         setIsDropdownOpen(false);
                         signOut();
                       }}
-                      className="w-full flex items-center px-4 py-2 text-sm text-red-400 hover:bg-slate-800 transition-colors"
+                      className="w-full flex items-center px-4 py-2.5 text-sm text-red-400 hover:bg-slate-800/70 transition-colors border-t border-slate-800/50"
                     >
                       <FaSignOutAlt className="mr-3" /> Logout
                     </button>
@@ -168,11 +215,23 @@ export default function Navbar() {
           <div className="pt-4 border-t border-slate-800">
             {session?.user ? (
               <div className="space-y-3">
-                <div className="text-sm font-medium text-gray-300">
-                  Hi, <span className="text-yellow-500">{getUserFirstName()}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-300">
+                    Hi, <span className="text-yellow-500">{getUserFirstName()}</span>
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                      isAdmin
+                        ? "bg-amber-500/20 text-amber-400"
+                        : "bg-blue-500/20 text-blue-400"
+                    }`}
+                  >
+                    {isAdmin ? "Admin" : "Client"}
+                  </span>
                 </div>
+
                 <Link
-                  href="/profile"
+                  href={profileLink}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block text-sm text-gray-300 hover:text-yellow-500"
                 >
