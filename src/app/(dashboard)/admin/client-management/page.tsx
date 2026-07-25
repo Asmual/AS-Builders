@@ -8,7 +8,6 @@ import {
   Mail,
   Phone,
   Building,
-  MoreVertical,
   CheckCircle2,
   XCircle,
   ExternalLink,

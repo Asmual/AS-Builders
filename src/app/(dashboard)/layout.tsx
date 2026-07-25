@@ -18,7 +18,7 @@ import {
   UserCheck,
   ShieldCheck,
   User,
-  FaUserShield,
+
 } from "lucide-react";
 import { useSession, signOut } from "@/lib/auth-client";
 
