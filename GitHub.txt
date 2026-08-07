@@ -8,5 +8,5 @@ git push -u origin main
 
 
 git add .
-git commit -m "feat(auth): redesign login page with prominent sign-up banner"
+git commit -m "feat(auth): integrate Google OAuth with Better-Auth for production"
 git push
